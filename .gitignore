@@ -1,0 +1,19 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build output
+bin/
+obj/
+
+# NuGet packages
+packages/
+
+# Other
+*.log
+*.cache
+*.db
+*.pdb
