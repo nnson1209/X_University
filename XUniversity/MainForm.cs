@@ -48,7 +48,7 @@ namespace XUniversity
         {
             try
             {
-                var dt = OracleAdminTool.DAL.DatabaseHelper.ExecuteTable("SELECT * FROM SINHVIEN FETCH FIRST 10 ROWS ONLY");
+                var dt = OracleAdminTool.DAL.DatabaseHelper.ExecuteTable("SELECT * FROM X_ADMIN.SINHVIEN FETCH FIRST 10 ROWS ONLY");
                 dgvPreview.DataSource = dt;
             }
             catch (Exception ex)

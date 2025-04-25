@@ -192,22 +192,16 @@ namespace XUniversity.Forms
                     MessageBox.Show("Please select a Grantee.");
                     return;
                 }
-
                 string privilege = cmbPrivilege.Text.Trim();
                 string objectName = cmbObjectName.Text.Trim();
                 string grantee = cmbGrantee.Text.Trim();
-                string column = cmbColumn.Text.Trim();
                 string withGrant = chkWithGrantOption.Checked ? " WITH GRANT OPTION" : "";
-
-                string columnsClause = "";
-                if ((privilege == "SELECT" || privilege == "UPDATE") && !string.IsNullOrEmpty(column))
-                    columnsClause = $"({column})";
 
                 string query = "";
                 if (privilege == "EXECUTE")
                     query = $"GRANT EXECUTE ON {objectName} TO {grantee}{withGrant}";
                 else
-                    query = $"GRANT {privilege}{columnsClause} ON {objectName} TO {grantee}{withGrant}";
+                    query = $"GRANT {privilege} ON {objectName} TO {grantee}{withGrant}";
 
                 using (OracleCommand cmd = new OracleCommand(query, connection))
                 {
@@ -222,6 +216,7 @@ namespace XUniversity.Forms
                 MessageBox.Show("Grant error: " + ex.Message);
             }
         }
+
 
         /// <summary>
         /// Xử lý thu hồi quyền (REVOKE) dựa trên dòng được chọn trong DataGridView.
@@ -282,18 +277,16 @@ namespace XUniversity.Forms
             try
             {
                 string query = @"
-                    SELECT GRANTEE, PRIVILEGE, OWNER || '.' || TABLE_NAME AS OBJECT_NAME,
-                           'TABLE/VIEW' AS OBJECT_TYPE, COLUMN_NAME
-                    FROM ALL_COL_PRIVS
-                    UNION ALL
-                    SELECT GRANTEE, PRIVILEGE, OWNER || '.' || TABLE_NAME AS OBJECT_NAME,
-                           'TABLE/VIEW' AS OBJECT_TYPE, NULL AS COLUMN_NAME
-                    FROM ALL_TAB_PRIVS
-                    UNION ALL
-                    SELECT GRANTEE, 'EXECUTE' AS PRIVILEGE, OWNER || '.' || NAME AS OBJECT_NAME,
-                           'PROCEDURE/FUNCTION' AS OBJECT_TYPE, NULL AS COLUMN_NAME
-                    FROM ALL_OBJ_PRIVS
-                    WHERE PRIVILEGE = 'EXECUTE'";
+                        SELECT GRANTEE, PRIVILEGE, TABLE_SCHEMA || '.' || TABLE_NAME AS OBJECT_NAME,
+                               'TABLE/VIEW' AS OBJECT_TYPE, COLUMN_NAME, 
+                               GRANTABLE AS GRANT_OPTION
+                        FROM ALL_COL_PRIVS
+                        UNION ALL
+                        SELECT GRANTEE, PRIVILEGE, TABLE_SCHEMA || '.' || TABLE_NAME AS OBJECT_NAME,
+                               'TABLE/VIEW' AS OBJECT_TYPE, NULL AS COLUMN_NAME,
+                               GRANTABLE AS GRANT_OPTION
+                        FROM ALL_TAB_PRIVS
+                        ORDER BY GRANTEE, OBJECT_NAME, PRIVILEGE";
 
                 OracleDataAdapter adapter = new OracleDataAdapter(query, connection);
                 DataTable dt = new DataTable();
