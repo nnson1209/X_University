@@ -1,19 +1,17 @@
 ﻿using System.Windows.Forms;
+using System.Drawing;
 
 namespace XUniversity.Forms
 {
     partial class ManageUserRoleForm
     {
         private System.ComponentModel.IContainer components = null;
-        private Panel pnlMain;
-        private Button btnViewUsers;
-        private Button btnViewRoles;
-        private Button btnCreateUser;
-        private Button btnEditUser;
-        private Button btnDeleteUser;
-        private Button btnCreateRole;
-        private Button btnEditRole;
-        private Button btnDeleteRole;
+        private TabControl tabControl;
+        private TabPage tabUsers, tabRoles;
+        private DataGridView dgvUsers, dgvRoles;
+        private FlowLayoutPanel pnlUserButtons, pnlRoleButtons;
+        private Button btnViewUsers, btnCreateUser, btnEditUser, btnDeleteUser;
+        private Button btnViewRoles, btnCreateRole, btnEditRole, btnDeleteRole;
 
         protected override void Dispose(bool disposing)
         {
@@ -26,102 +24,95 @@ namespace XUniversity.Forms
 
         private void InitializeComponent()
         {
-            this.pnlMain = new Panel();
-            this.btnViewUsers = new Button();
-            this.btnViewRoles = new Button();
-            this.btnCreateUser = new Button();
-            this.btnEditUser = new Button();
-            this.btnDeleteUser = new Button();
-            this.btnCreateRole = new Button();
-            this.btnEditRole = new Button();
-            this.btnDeleteRole = new Button();
-            this.SuspendLayout();
+            this.tabControl = new TabControl();
+            this.tabUsers = new TabPage("Quản lý User");
+            this.tabRoles = new TabPage("Quản lý Role");
 
-            // 
-            // pnlMain
-            // 
-            this.pnlMain.Location = new System.Drawing.Point(180, 10);
-            this.pnlMain.Size = new System.Drawing.Size(600, 380);
-            this.pnlMain.BorderStyle = BorderStyle.FixedSingle;
+            // DataGridView cho User
+            this.dgvUsers = new DataGridView
+            {
+                Dock = DockStyle.Fill,
+                ReadOnly = true,
+                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                BackgroundColor = Color.White
+            };
 
-            // 
-            // btnViewUsers
-            // 
-            this.btnViewUsers.Location = new System.Drawing.Point(10, 10);
-            this.btnViewUsers.Size = new System.Drawing.Size(150, 30);
-            this.btnViewUsers.Text = "View Users";
+            // DataGridView cho Role
+            this.dgvRoles = new DataGridView
+            {
+                Dock = DockStyle.Fill,
+                ReadOnly = true,
+                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                BackgroundColor = Color.White
+            };
+
+            // Các nút cho User
+            this.btnViewUsers = new Button { Text = "Xem User", Width = 120, Height = 36, Font = new Font("Segoe UI", 10, FontStyle.Bold), BackColor = Color.FromArgb(220, 230, 241), FlatStyle = FlatStyle.Flat };
+            this.btnCreateUser = new Button { Text = "Tạo User", Width = 120, Height = 36, Font = new Font("Segoe UI", 10, FontStyle.Bold), BackColor = Color.FromArgb(220, 241, 220), FlatStyle = FlatStyle.Flat };
+            this.btnEditUser = new Button { Text = "Sửa User", Width = 120, Height = 36, Font = new Font("Segoe UI", 10, FontStyle.Bold), BackColor = Color.FromArgb(241, 241, 220), FlatStyle = FlatStyle.Flat };
+            this.btnDeleteUser = new Button { Text = "Xóa User", Width = 120, Height = 36, Font = new Font("Segoe UI", 10, FontStyle.Bold), BackColor = Color.FromArgb(241, 220, 220), FlatStyle = FlatStyle.Flat };
+
+            // Các nút cho Role
+            this.btnViewRoles = new Button { Text = "Xem Role", Width = 120, Height = 36, Font = new Font("Segoe UI", 10, FontStyle.Bold), BackColor = Color.FromArgb(220, 230, 241), FlatStyle = FlatStyle.Flat };
+            this.btnCreateRole = new Button { Text = "Tạo Role", Width = 120, Height = 36, Font = new Font("Segoe UI", 10, FontStyle.Bold), BackColor = Color.FromArgb(220, 241, 220), FlatStyle = FlatStyle.Flat };
+            this.btnEditRole = new Button { Text = "Sửa Role", Width = 120, Height = 36, Font = new Font("Segoe UI", 10, FontStyle.Bold), BackColor = Color.FromArgb(241, 241, 220), FlatStyle = FlatStyle.Flat };
+            this.btnDeleteRole = new Button { Text = "Xóa Role", Width = 120, Height = 36, Font = new Font("Segoe UI", 10, FontStyle.Bold), BackColor = Color.FromArgb(241, 220, 220), FlatStyle = FlatStyle.Flat };
+
+            // Panel nút cho User
+            this.pnlUserButtons = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Top,
+                Height = 50,
+                FlowDirection = FlowDirection.LeftToRight,
+                Padding = new Padding(10, 8, 0, 8),
+                BackColor = Color.FromArgb(245, 245, 245)
+            };
+            this.pnlUserButtons.Controls.AddRange(new Control[] { btnViewUsers, btnCreateUser, btnEditUser, btnDeleteUser });
+
+            // Panel nút cho Role
+            this.pnlRoleButtons = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Top,
+                Height = 50,
+                FlowDirection = FlowDirection.LeftToRight,
+                Padding = new Padding(10, 8, 0, 8),
+                BackColor = Color.FromArgb(245, 245, 245)
+            };
+            this.pnlRoleButtons.Controls.AddRange(new Control[] { btnViewRoles, btnCreateRole, btnEditRole, btnDeleteRole });
+
+            // Tab User
+            this.tabUsers.Controls.Add(dgvUsers);
+            this.tabUsers.Controls.Add(pnlUserButtons);
+
+            // Tab Role
+            this.tabRoles.Controls.Add(dgvRoles);
+            this.tabRoles.Controls.Add(pnlRoleButtons);
+
+            // TabControl
+            this.tabControl.Dock = DockStyle.Fill;
+            this.tabControl.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+            this.tabControl.TabPages.Add(tabUsers);
+            this.tabControl.TabPages.Add(tabRoles);
+
+            // Form settings
+            this.ClientSize = new System.Drawing.Size(800, 500);
+            this.Controls.Add(this.tabControl);
+            this.Text = "Quản lý User và Role";
+            this.Font = new Font("Segoe UI", 10);
+
+            // Sự kiện
             this.btnViewUsers.Click += new System.EventHandler(this.btnViewUsers_Click);
-
-            // 
-            // btnViewRoles
-            // 
-            this.btnViewRoles.Location = new System.Drawing.Point(10, 50);
-            this.btnViewRoles.Size = new System.Drawing.Size(150, 30);
-            this.btnViewRoles.Text = "View Roles";
-            this.btnViewRoles.Click += new System.EventHandler(this.btnViewRoles_Click);
-
-            // 
-            // btnCreateUser
-            // 
-            this.btnCreateUser.Location = new System.Drawing.Point(10, 90);
-            this.btnCreateUser.Size = new System.Drawing.Size(150, 30);
-            this.btnCreateUser.Text = "Create User";
             this.btnCreateUser.Click += new System.EventHandler(this.btnCreateUser_Click);
-
-            // 
-            // btnEditUser
-            // 
-            this.btnEditUser.Location = new System.Drawing.Point(10, 130);
-            this.btnEditUser.Size = new System.Drawing.Size(150, 30);
-            this.btnEditUser.Text = "Edit User";
             this.btnEditUser.Click += new System.EventHandler(this.btnEditUser_Click);
-
-            // 
-            // btnDeleteUser
-            // 
-            this.btnDeleteUser.Location = new System.Drawing.Point(10, 170);
-            this.btnDeleteUser.Size = new System.Drawing.Size(150, 30);
-            this.btnDeleteUser.Text = "Delete User";
             this.btnDeleteUser.Click += new System.EventHandler(this.btnDeleteUser_Click);
 
-            // 
-            // btnCreateRole
-            // 
-            this.btnCreateRole.Location = new System.Drawing.Point(10, 210);
-            this.btnCreateRole.Size = new System.Drawing.Size(150, 30);
-            this.btnCreateRole.Text = "Create Role";
+            this.btnViewRoles.Click += new System.EventHandler(this.btnViewRoles_Click);
             this.btnCreateRole.Click += new System.EventHandler(this.btnCreateRole_Click);
-
-            // 
-            // btnEditRole
-            // 
-            this.btnEditRole.Location = new System.Drawing.Point(10, 250);
-            this.btnEditRole.Size = new System.Drawing.Size(150, 30);
-            this.btnEditRole.Text = "Edit Role";
             this.btnEditRole.Click += new System.EventHandler(this.btnEditRole_Click);
-
-            // 
-            // btnDeleteRole
-            // 
-            this.btnDeleteRole.Location = new System.Drawing.Point(10, 290);
-            this.btnDeleteRole.Size = new System.Drawing.Size(150, 30);
-            this.btnDeleteRole.Text = "Delete Role";
             this.btnDeleteRole.Click += new System.EventHandler(this.btnDeleteRole_Click);
 
-            // 
-            // ManageUserRoleForm
-            // 
-            this.ClientSize = new System.Drawing.Size(800, 400);
-            this.Controls.Add(this.pnlMain);
-            this.Controls.Add(this.btnViewUsers);
-            this.Controls.Add(this.btnViewRoles);
-            this.Controls.Add(this.btnCreateUser);
-            this.Controls.Add(this.btnEditUser);
-            this.Controls.Add(this.btnDeleteUser);
-            this.Controls.Add(this.btnCreateRole);
-            this.Controls.Add(this.btnEditRole);
-            this.Controls.Add(this.btnDeleteRole);
-            this.Text = "User and Role Management";
             this.ResumeLayout(false);
         }
     }
