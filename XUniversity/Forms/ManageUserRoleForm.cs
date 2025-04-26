@@ -45,37 +45,35 @@ namespace XUniversity.Forms
 
         private void btnViewUsers_Click(object sender, EventArgs e)
         {
-            DisplayData(
-                "SELECT username FROM all_users WHERE oracle_maintained = 'N'"
-            );
-        }
-
-        private void btnViewRoles_Click(object sender, EventArgs e)
-        {
-            DisplayData(
-                "SELECT role FROM dba_roles"
-            );
-        }
-
-        private void DisplayData(string sql)
-        {
-            pnlMain.Controls.Clear();
-            var dgv = new DataGridView
-            {
-                Dock = DockStyle.Fill,
-                ReadOnly = true,
-                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-            };
-            pnlMain.Controls.Add(dgv);
-
+            // Hiển thị danh sách user trên dgvUsers
             try
             {
-                using (var cmd = new OracleCommand(sql, connection))
+                using (var cmd = new OracleCommand("SELECT username FROM all_users WHERE oracle_maintained = 'N'", connection))
                 using (var adapter = new OracleDataAdapter(cmd))
                 {
                     var dt = new DataTable();
                     adapter.Fill(dt);
-                    dgv.DataSource = dt;
+                    dgvUsers.DataSource = dt;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message,
+                                "Lỗi truy vấn", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnViewRoles_Click(object sender, EventArgs e)
+        {
+            // Hiển thị danh sách role trên dgvRoles
+            try
+            {
+                using (var cmd = new OracleCommand("SELECT role FROM dba_roles", connection))
+                using (var adapter = new OracleDataAdapter(cmd))
+                {
+                    var dt = new DataTable();
+                    adapter.Fill(dt);
+                    dgvRoles.DataSource = dt;
                 }
             }
             catch (Exception ex)
@@ -92,7 +90,7 @@ namespace XUniversity.Forms
             var txtUsername = new TextBox { Top = 30, Left = 10, Width = 200 };
             var lblPassword = new Label { Text = "Password", Top = 60, Left = 10 };
             var txtPassword = new TextBox { Top = 80, Left = 10, Width = 200 };
-            var btnSubmit = new Button { Text = "Create", Top = 110, Left = 10 };
+            var btnSubmit = new Button { Text = "Create", Top = 120, Left = 10 };
 
             btnSubmit.Click += (s, args) =>
             {
@@ -101,6 +99,7 @@ namespace XUniversity.Forms
                     "User created successfully.",
                     "Lỗi tạo user"
                 );
+                btnViewUsers_Click(null, null); // Refresh danh sách
             };
 
             pnlMain.Controls.AddRange(new Control[] { lblUsername, txtUsername, lblPassword, txtPassword, btnSubmit });
@@ -113,7 +112,7 @@ namespace XUniversity.Forms
             var txtUsername = new TextBox { Top = 30, Left = 10, Width = 200 };
             var lblNewPassword = new Label { Text = "New Password", Top = 60, Left = 10 };
             var txtNewPassword = new TextBox { Top = 80, Left = 10, Width = 200 };
-            var btnSubmit = new Button { Text = "Update", Top = 110, Left = 10 };
+            var btnSubmit = new Button { Text = "Update", Top = 120, Left = 10 };
 
             btnSubmit.Click += (s, args) =>
             {
@@ -122,6 +121,7 @@ namespace XUniversity.Forms
                     "User password updated successfully.",
                     "Lỗi cập nhật user"
                 );
+                btnViewUsers_Click(null, null);
             };
 
             pnlMain.Controls.AddRange(new Control[] { lblUsername, txtUsername, lblNewPassword, txtNewPassword, btnSubmit });
@@ -132,7 +132,7 @@ namespace XUniversity.Forms
             pnlMain.Controls.Clear();
             var lblUsername = new Label { Text = "Username", Top = 10, Left = 10 };
             var txtUsername = new TextBox { Top = 30, Left = 10, Width = 200 };
-            var btnSubmit = new Button { Text = "Delete", Top = 60, Left = 10 };
+            var btnSubmit = new Button { Text = "Delete", Top = 70, Left = 10 };
 
             btnSubmit.Click += (s, args) =>
             {
@@ -141,6 +141,7 @@ namespace XUniversity.Forms
                     "User deleted successfully.",
                     "Lỗi xóa user"
                 );
+                btnViewUsers_Click(null, null);
             };
 
             pnlMain.Controls.AddRange(new Control[] { lblUsername, txtUsername, btnSubmit });
@@ -151,7 +152,7 @@ namespace XUniversity.Forms
             pnlMain.Controls.Clear();
             var lblRole = new Label { Text = "Role Name", Top = 10, Left = 10 };
             var txtRole = new TextBox { Top = 30, Left = 10, Width = 200 };
-            var btnSubmit = new Button { Text = "Create Role", Top = 60, Left = 10 };
+            var btnSubmit = new Button { Text = "Create Role", Top = 70, Left = 10 };
 
             btnSubmit.Click += (s, args) =>
             {
@@ -160,6 +161,7 @@ namespace XUniversity.Forms
                     "Role created successfully.",
                     "Lỗi tạo role"
                 );
+                btnViewRoles_Click(null, null);
             };
 
             pnlMain.Controls.AddRange(new Control[] { lblRole, txtRole, btnSubmit });
@@ -172,7 +174,7 @@ namespace XUniversity.Forms
             var txtRole = new TextBox { Top = 30, Left = 10, Width = 200 };
             var lblNewRole = new Label { Text = "New Role Name", Top = 60, Left = 10 };
             var txtNewRole = new TextBox { Top = 80, Left = 10, Width = 200 };
-            var btnSubmit = new Button { Text = "Rename", Top = 110, Left = 10 };
+            var btnSubmit = new Button { Text = "Rename", Top = 120, Left = 10 };
 
             btnSubmit.Click += (s, args) =>
             {
@@ -181,6 +183,7 @@ namespace XUniversity.Forms
                     "Role renamed successfully.",
                     "Lỗi cập nhật role"
                 );
+                btnViewRoles_Click(null, null);
             };
 
             pnlMain.Controls.AddRange(new Control[] { lblRole, txtRole, lblNewRole, txtNewRole, btnSubmit });
@@ -191,7 +194,7 @@ namespace XUniversity.Forms
             pnlMain.Controls.Clear();
             var lblRole = new Label { Text = "Role Name", Top = 10, Left = 10 };
             var txtRole = new TextBox { Top = 30, Left = 10, Width = 200 };
-            var btnSubmit = new Button { Text = "Delete Role", Top = 60, Left = 10 };
+            var btnSubmit = new Button { Text = "Delete Role", Top = 70, Left = 10 };
 
             btnSubmit.Click += (s, args) =>
             {
@@ -200,6 +203,7 @@ namespace XUniversity.Forms
                     "Role deleted successfully.",
                     "Lỗi xóa role"
                 );
+                btnViewRoles_Click(null, null);
             };
 
             pnlMain.Controls.AddRange(new Control[] { lblRole, txtRole, btnSubmit });

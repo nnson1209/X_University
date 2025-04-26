@@ -12,6 +12,7 @@ namespace XUniversity.Forms
         private FlowLayoutPanel pnlUserButtons, pnlRoleButtons;
         private Button btnViewUsers, btnCreateUser, btnEditUser, btnDeleteUser;
         private Button btnViewRoles, btnCreateRole, btnEditRole, btnDeleteRole;
+        private Panel pnlMain;
 
         protected override void Dispose(bool disposing)
         {
@@ -82,6 +83,15 @@ namespace XUniversity.Forms
             };
             this.pnlRoleButtons.Controls.AddRange(new Control[] { btnViewRoles, btnCreateRole, btnEditRole, btnDeleteRole });
 
+            // Thêm pnlMain
+            this.pnlMain = new Panel
+            {
+                Dock = DockStyle.Right,
+                Width = 320,
+                BackColor = Color.WhiteSmoke,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+
             // Tab User
             this.tabUsers.Controls.Add(dgvUsers);
             this.tabUsers.Controls.Add(pnlUserButtons);
@@ -91,13 +101,15 @@ namespace XUniversity.Forms
             this.tabRoles.Controls.Add(pnlRoleButtons);
 
             // TabControl
-            this.tabControl.Dock = DockStyle.Fill;
+            this.tabControl.Dock = DockStyle.Left;
+            this.tabControl.Width = 480;
             this.tabControl.Font = new Font("Segoe UI", 11, FontStyle.Bold);
             this.tabControl.TabPages.Add(tabUsers);
             this.tabControl.TabPages.Add(tabRoles);
 
             // Form settings
             this.ClientSize = new System.Drawing.Size(800, 500);
+            this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.tabControl);
             this.Text = "Quản lý User và Role";
             this.Font = new Font("Segoe UI", 10);
