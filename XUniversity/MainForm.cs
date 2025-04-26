@@ -1,20 +1,14 @@
 ﻿using Oracle.ManagedDataAccess.Client;
 using OracleAdminTool.DAL;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace XUniversity
 {
     public partial class MainForm : Form
     {
-
         public MainForm()
         {
             BuildInitializeComponent();
@@ -23,20 +17,16 @@ namespace XUniversity
         private void InitializeComponent()
         {
             this.SuspendLayout();
-            // 
-            // MainForm
-            // 
-            this.ClientSize = new System.Drawing.Size(744, 353);
+            this.ClientSize = new System.Drawing.Size(900, 600);
             this.Name = "MainForm";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResumeLayout(false);
-
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-
         }
+
         private void btnTestConnection_Click(object sender, EventArgs e)
         {
             if (DatabaseHelper.TestConnection(out var error))
@@ -50,6 +40,7 @@ namespace XUniversity
             {
                 var dt = OracleAdminTool.DAL.DatabaseHelper.ExecuteTable("SELECT * FROM X_ADMIN.SINHVIEN FETCH FIRST 10 ROWS ONLY");
                 dgvPreview.DataSource = dt;
+                dgvPreview.Visible = true;
             }
             catch (Exception ex)
             {
@@ -57,6 +48,5 @@ namespace XUniversity
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
 }

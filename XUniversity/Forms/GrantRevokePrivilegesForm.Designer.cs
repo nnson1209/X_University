@@ -77,12 +77,8 @@ namespace XUniversity.Forms
             tblGrantRevoke.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
             tblGrantRevoke.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
             tblGrantRevoke.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-            tblGrantRevoke.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tblGrantRevoke.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tblGrantRevoke.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tblGrantRevoke.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tblGrantRevoke.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tblGrantRevoke.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            for (int i = 0; i < 6; i++)
+                tblGrantRevoke.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
 
             // Add controls to table
             tblGrantRevoke.Controls.Add(lblGranteeType, 0, 0);
