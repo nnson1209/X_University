@@ -1,75 +1,76 @@
-﻿using System.Configuration;
-using Oracle.ManagedDataAccess.Client;
-using System.Data;
+﻿using Oracle.ManagedDataAccess.Client;
 using System;
+using System.Data;
+using System.Configuration;
 
-namespace OracleAdminTool.DAL
+namespace XUniversity.DAL
 {
     public static class DatabaseHelper
     {
-        // Đọc connection string từ App.config
-        public static readonly string ConnString =
-            ConfigurationManager.ConnectionStrings["OracleDbContext"].ConnectionString;
+        private static readonly string connectionString = ConfigurationManager.ConnectionStrings["OracleDbContext"].ConnectionString;
 
-        public static bool TestConnection(out string errorMessage)
+        public static OracleConnection GetConnection()
+        {
+            return new OracleConnection(connectionString);
+        }
+
+        public static bool TestConnection(out string error)
         {
             try
             {
-                using (var conn = new OracleConnection(ConnString))
+                using (var conn = GetConnection())
                 {
                     conn.Open();
-                    errorMessage = null;
-                    return conn.State == ConnectionState.Open;
+                    error = null;
+                    return true;
                 }
             }
             catch (Exception ex)
             {
-                errorMessage = ex.Message;
+                error = ex.Message;
                 return false;
             }
         }
 
-        // Trả về dạng bảng cho truy vấn SELECT
-        public static DataTable ExecuteTable(string sql, params OracleParameter[] parameters)
+        public static DataTable ExecuteTable(string query)
         {
-            DataTable dt = new DataTable();
-            using (OracleConnection conn = new OracleConnection(ConnString))
-            {
-                using (OracleCommand cmd = new OracleCommand(sql, conn))
-                {
-                    if (parameters != null)
-                        cmd.Parameters.AddRange(parameters);
-                    using (OracleDataAdapter da = new OracleDataAdapter(cmd))
-                    {
-                        da.Fill(dt);
-                    }
-                }
-            }
-            return dt;
-        }
-
-        // Thực thi INSERT/UPDATE/DELETE hoặc DDL
-        public static int ExecuteNonQuery(string sql, params OracleParameter[] parameters)
-        {
-            int result;
-            using (OracleConnection conn = new OracleConnection(ConnString))
+            using (var conn = GetConnection())
             {
                 conn.Open();
-                using (OracleCommand cmd = new OracleCommand(sql, conn))
+                using (var cmd = new OracleCommand(query, conn))
                 {
-                    if (parameters != null)
-                        cmd.Parameters.AddRange(parameters);
-                    result = cmd.ExecuteNonQuery();
+                    var dt = new DataTable();
+                    using (var adapter = new OracleDataAdapter(cmd))
+                    {
+                        adapter.Fill(dt);
+                    }
+                    return dt;
                 }
             }
-            return result;
         }
 
-        public static OracleConnection GetOpenConnection()
+        public static int ExecuteNonQuery(string query)
         {
-            OracleConnection conn = new OracleConnection(ConnString);
-            conn.Open();
-            return conn;
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new OracleCommand(query, conn))
+                {
+                    return cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static object ExecuteScalar(string query)
+        {
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new OracleCommand(query, conn))
+                {
+                    return cmd.ExecuteScalar();
+                }
+            }
         }
     }
 }
