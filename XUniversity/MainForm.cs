@@ -1,5 +1,6 @@
 ﻿using Oracle.ManagedDataAccess.Client;
 using XUniversity.DAL;
+using XUniversity.Utils;
 using System;
 using System.Data;
 using System.Windows.Forms;
@@ -148,6 +149,31 @@ namespace XUniversity
             if (MessageBox.Show("Bạn có chắc muốn thoát?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
             {
                 e.Cancel = true;
+            }
+        }
+
+        private void btnTestConnection_Click(object sender, EventArgs e)
+        {
+            if (DatabaseHelper.TestConnection(out string error))
+            {
+                MessageBox.Show("Kết nối thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show($"Lỗi kết nối: {error}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnViewData_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Hiển thị dữ liệu mặc định (ví dụ: bảng NHANVIEN)
+                LoadData("NHANVIEN");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tải dữ liệu: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

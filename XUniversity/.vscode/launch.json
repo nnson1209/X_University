@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch XUniversity",
+            "type": "clr",
+            "request": "launch",
+            "program": "${workspaceFolder}/X_University/XUniversity/bin/Debug/XUniversity.exe",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        }
+    ]
+} 

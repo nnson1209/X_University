@@ -118,8 +118,14 @@
     <Compile Include="UI\DashBoard.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UI\DashBoard.Designer.cs">
+      <DependentUpon>DashBoard.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\LoginForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\LoginForm.Designer.cs">
+      <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\NhanVienForm.cs">
       <SubType>Form</SubType>
@@ -128,6 +134,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Utils\OracleUtils.cs" />
+    <Compile Include="Utils\SessionManager.cs" />
     <EmbeddedResource Include="Forms\ManageUserRoleForm.resx">
       <DependentUpon>ManageUserRoleForm.cs</DependentUpon>
     </EmbeddedResource>

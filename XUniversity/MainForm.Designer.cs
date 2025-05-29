@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 using System;
-using OracleAdminTool.DAL;
+using XUniversity.DAL;
 using System.Configuration;
 
 namespace XUniversity
@@ -9,12 +9,12 @@ namespace XUniversity
     {
         private Panel panelSidebar;
         private Panel panelMain;
-        private Button btnManageUserRole, btnGrant, btnRevoke, btnView;
+        private Button btnManageUserRole, btnRevoke;
         private Button btnTestConnection;
         private Button btnViewData;
         private DataGridView dgvPreview;
 
-        private void BuildInitializeComponent()
+        private void InitializeComponent()
         {
             panelSidebar = new Panel { Dock = DockStyle.Left, Width = 180 };
             panelMain = new Panel { Dock = DockStyle.Fill };

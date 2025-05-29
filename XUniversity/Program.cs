@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using XUniversity;
 
-namespace OracleAdminTool
+namespace XUniversity
 {
     static class Program
     {

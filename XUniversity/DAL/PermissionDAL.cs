@@ -1,4 +1,4 @@
-﻿using OracleAdminTool.DAL;
+﻿using XUniversity.DAL;
 using System.Data;
 
 namespace XUniversity.DAL
