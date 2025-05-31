@@ -34,19 +34,5 @@ namespace XUniversity
             else
                 MessageBox.Show($"Lỗi kết nối: {error}", "Test Connection", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
-        private void btnViewData_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var dt = OracleAdminTool.DAL.DatabaseHelper.ExecuteTable("SELECT * FROM X_ADMIN.SINHVIEN FETCH FIRST 10 ROWS ONLY");
-                dgvPreview.DataSource = dt;
-                dgvPreview.Visible = true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi truy vấn dữ liệu: {ex.Message}", "View Data",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
     }
 }

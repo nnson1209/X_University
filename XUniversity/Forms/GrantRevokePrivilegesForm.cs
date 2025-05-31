@@ -20,7 +20,7 @@ namespace XUniversity.Forms
         public GrantRevokePrivilegesForm()
         {
             InitializeComponent();
-            string connStr = "User Id=X_ADMIN;Password=admin123;Data Source=localhost:1521/ORCLPDB;";
+            string connStr = "User Id=ADMIN_OLS;Password=123;Data Source=localhost:1521/ORCL21PDB1;";
             connection = new OracleConnection(connStr);
             try
             {

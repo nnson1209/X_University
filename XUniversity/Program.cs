@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using XUniversity;
+using XUniversity.Forms;
 
 namespace OracleAdminTool
 {
@@ -14,7 +14,7 @@ namespace OracleAdminTool
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            Application.Run(new LoginForm());
         }
     }
 }

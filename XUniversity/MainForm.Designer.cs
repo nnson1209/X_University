@@ -14,7 +14,6 @@ namespace XUniversity
         private Label lblTitle;
         private Button btnManageUserRole, btnGrant, btnRevoke, btnView;
         private Button btnTestConnection;
-        private Button btnViewData;
         private DataGridView dgvPreview;
 
         private void BuildInitializeComponent()
@@ -61,21 +60,11 @@ namespace XUniversity
                 BackColor = Color.FromArgb(240, 240, 240),
                 FlatStyle = FlatStyle.Flat
             };
-            btnViewData = new Button
-            {
-                Text = "Xem Dữ liệu",
-                Dock = DockStyle.Top,
-                Height = 45,
-                Font = new Font("Segoe UI", 10),
-                BackColor = Color.FromArgb(240, 240, 240),
-                FlatStyle = FlatStyle.Flat
-            };
 
             // Thêm khoảng cách giữa các nút
             panelSidebar.Padding = new Padding(0, 20, 0, 0);
 
             // Thứ tự add: từ dưới lên trên
-            panelSidebar.Controls.Add(btnViewData);
             panelSidebar.Controls.Add(btnTestConnection);
             panelSidebar.Controls.Add(btnRevoke);
             panelSidebar.Controls.Add(btnManageUserRole);
@@ -107,7 +96,6 @@ namespace XUniversity
             btnManageUserRole.Click += (s, e) => LoadForm(new Forms.ManageUserRoleForm());
             btnRevoke.Click += (s, e) => LoadForm(new Forms.GrantRevokePrivilegesForm());
             btnTestConnection.Click += new EventHandler(this.btnTestConnection_Click);
-            btnViewData.Click += new EventHandler(this.btnViewData_Click);
         }
 
         private void LoadForm(Form f)
