@@ -27,6 +27,13 @@ namespace XUniversity.Forms
             lblWelcome.Text = $"Xin chào {username} ({role})!";
         }
 
+        private void BtnLogout_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            new LoginForm().ShowDialog();  // mở lại form đăng nhập
+            this.Close();
+        }
+
         private void btnLoadData_NV_Click(object sender, EventArgs e)
         {
             try
@@ -427,37 +434,61 @@ DCHI = :dchi, DT = :dt, KHOA = :khoa, TINHTRANG = :tinhtrang WHERE MASV = :masv"
             }
         }
 
-        private void BtnThongBao_Click(object sender, EventArgs e)
+        private void btnThongBao_Click(object sender, EventArgs e)
         {
-            Form f = new Form();
-            f.Text = "Thông báo dành cho bạn";
-            f.Size = new Size(600, 400);
-            f.StartPosition = FormStartPosition.CenterParent;
-
-            DataGridView dgv = new DataGridView
-            {
-                Dock = DockStyle.Fill,
-                ReadOnly = true,
-                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-            };
-            f.Controls.Add(dgv);
-
             try
             {
-                OracleDataAdapter adapter = new OracleDataAdapter("SELECT NOIDUNG FROM ADMIN_OLS.THONGBAO", conn);
-                DataTable dt = new DataTable();
-                adapter.Fill(dt);
-                dgv.DataSource = dt;
+                string adminConnStr = "User Id=ADMIN_OLS;Password=123;Data Source=localhost:1521/ORCL21PDB1;";
+                string password = null;
+
+                using (OracleConnection adminConn = new OracleConnection(adminConnStr))
+                {
+                    adminConn.Open();
+                    OracleCommand cmd = new OracleCommand("SELECT PASSWORD FROM USER_ROLES WHERE USERNAME = :username", adminConn);
+                    cmd.Parameters.Add("username", username);
+                    object result = cmd.ExecuteScalar();
+                    password = result?.ToString();
+                }
+
+                if (string.IsNullOrEmpty(password))
+                {
+                    MessageBox.Show("Không thể xác thực mật khẩu người dùng.");
+                    return;
+                }
+
+                string userConnStr = $"User Id={username};Password={password};Data Source=localhost:1521/ORCL21PDB1;";
+                using (OracleConnection userConn = new OracleConnection(userConnStr))
+                {
+                    userConn.Open();
+
+                    Form f = new Form();
+                    f.Text = "Thông báo dành cho bạn";
+                    f.Size = new Size(600, 400);
+                    f.StartPosition = FormStartPosition.CenterParent;
+
+                    DataGridView dgv = new DataGridView
+                    {
+                        Dock = DockStyle.Fill,
+                        ReadOnly = true,
+                        AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+                    };
+                    f.Controls.Add(dgv);
+
+                    OracleDataAdapter adapter = new OracleDataAdapter("SELECT NOIDUNG FROM ADMIN_OLS.THONGBAO", userConn);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    dgv.DataSource = dt;
+
+                    f.ShowDialog();
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Không thể tải thông báo: " + ex.Message);
-                f.Close();
-                return;
+                MessageBox.Show("Lỗi khi tải thông báo: " + ex.Message);
             }
-
-            f.ShowDialog();
         }
+
+
 
 
 

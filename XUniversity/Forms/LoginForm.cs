@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Collections.Specialized.BitVector32;
 
 namespace XUniversity.Forms
 {
@@ -19,7 +20,7 @@ namespace XUniversity.Forms
         {
             InitializeComponent();
             string connStr = "User Id=ADMIN_OLS;Password=123;Data Source=localhost:1521/ORCL21PDB1;";
-            connection = new OracleConnection(connStr); // dùng user quản trị để kiểm tra thông tin đăng nhập
+            connection = new OracleConnection(connStr);
         }
 
         private void btnLogin_Click(object sender, EventArgs e)

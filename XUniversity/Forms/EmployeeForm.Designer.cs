@@ -211,6 +211,8 @@ namespace XUniversity.Forms
         // THONGBAO
         private Button btnThongBao;
 
+        private Button btnLogout;
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null)) components.Dispose();
@@ -243,9 +245,19 @@ namespace XUniversity.Forms
             btnThongBao.Size = new Size(100, 30);
             btnThongBao.Location = new Point(this.Width - 120, 10);
             btnThongBao.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnThongBao.Click += BtnThongBao_Click;
+            btnThongBao.Click += btnThongBao_Click;
 
             this.Controls.Add(btnThongBao);
+
+            btnLogout = new Button();
+            btnLogout.Text = "Đăng xuất";
+            btnLogout.Font = new Font("Segoe UI", 9F);
+            btnLogout.Size = new Size(100, 28);
+            btnLogout.Location = new Point(this.Width - 120, 10);
+            btnLogout.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnLogout.Click += BtnLogout_Click;
+
+            this.Controls.Add(btnLogout);
 
 
             this.tabControlMain.Location = new System.Drawing.Point(10, 40);
