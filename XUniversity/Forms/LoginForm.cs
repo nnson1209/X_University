@@ -57,6 +57,8 @@ namespace XUniversity.Forms
                     }
                     else
                     {
+                        string userConnStr = $"User Id={username};Password={password};Data Source=localhost:1521/ORCL21PDB1;";
+                        connection = new OracleConnection(userConnStr);
                         EmployeeForm empForm = new EmployeeForm(connection, username, role);
                         empForm.ShowDialog();
                     }
