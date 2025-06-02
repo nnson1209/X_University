@@ -671,6 +671,7 @@ using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Data;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace XUniversity.Forms
 {
@@ -729,46 +730,6 @@ namespace XUniversity.Forms
 
         private void SetPermissionByRole_NhanVien()
         {
-            //txtMaNV.ReadOnly = true;
-            //txtHoTen.ReadOnly = true;
-            //txtPhai.ReadOnly = true;
-            //txtNgaySinh.ReadOnly = true;
-            //txtSoDT.ReadOnly = true;
-            //txtLuong.ReadOnly = true;
-            //txtPhuCap.ReadOnly = true;
-            //txtVaiTro.ReadOnly = true;
-            //txtMaDV.ReadOnly = true;
-
-            //btnLoadData_NV.Enabled = true;
-            //btnInsert_NV.Enabled = false;
-            //btnUpdate_NV.Enabled = false;
-            //btnDelete_NV.Enabled = false;
-
-            //if (role == "NV_TCHC")
-            //{
-            //    txtMaNV.ReadOnly = false;
-            //    txtHoTen.ReadOnly = false;
-            //    txtPhai.ReadOnly = false;
-            //    txtNgaySinh.ReadOnly = false;
-            //    txtSoDT.ReadOnly = false;
-            //    txtLuong.ReadOnly = false;
-            //    txtPhuCap.ReadOnly = false;
-            //    txtVaiTro.ReadOnly = false;
-            //    txtMaDV.ReadOnly = false;
-
-            //    btnInsert_NV.Enabled = true;
-            //    btnUpdate_NV.Enabled = true;
-            //    btnDelete_NV.Enabled = true;
-            //}
-            //else if (role == "TRGDV" || role == "GV" || role == "NV_PDT" || role == "NV_PKT" || role == "NV_CTSV" || role == "NVCB")
-            //{
-            //    txtSoDT.ReadOnly = false;
-            //    btnUpdate_NV.Enabled = true;
-            //}
-            //else
-            //{
-            //    btnLoadData_NV.Enabled = false;
-            //}
             txtHoTen.ReadOnly = true;
             txtLuong.ReadOnly = true;
             txtPhuCap.ReadOnly = true;
@@ -1346,7 +1307,56 @@ namespace XUniversity.Forms
 
         private void btnThongBao_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Chức năng Thông báo sẽ được phát triển sau!");
+            try
+            {
+                string adminConnStr = "User Id=ADMIN_OLS;Password=123;Data Source=localhost:1521/ORCL21PDB1;";
+                string password = null;
+
+                using (OracleConnection adminConn = new OracleConnection(adminConnStr))
+                {
+                    adminConn.Open();
+                    OracleCommand cmd = new OracleCommand("SELECT PASSWORD FROM USER_ROLES WHERE USERNAME = :username", adminConn);
+                    cmd.Parameters.Add("username", username);
+                    object result = cmd.ExecuteScalar();
+                    password = result?.ToString();
+                }
+
+                if (string.IsNullOrEmpty(password))
+                {
+                    MessageBox.Show("Không thể xác thực mật khẩu người dùng.");
+                    return;
+                }
+
+                string userConnStr = $"User Id={username};Password={password};Data Source=localhost:1521/ORCL21PDB1;";
+                using (OracleConnection userConn = new OracleConnection(userConnStr))
+                {
+                    userConn.Open();
+
+                    Form f = new Form();
+                    f.Text = "Thông báo dành cho bạn";
+                    f.Size = new Size(600, 400);
+                    f.StartPosition = FormStartPosition.CenterParent;
+
+                    DataGridView dgv = new DataGridView
+                    {
+                        Dock = DockStyle.Fill,
+                        ReadOnly = true,
+                        AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+                    };
+                    f.Controls.Add(dgv);
+
+                    OracleDataAdapter adapter = new OracleDataAdapter("SELECT NOIDUNG FROM ADMIN_OLS.THONGBAO", userConn);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    dgv.DataSource = dt;
+
+                    f.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải thông báo: " + ex.Message);
+            }
         }
 
         private void BtnLogout_Click(object sender, EventArgs e)
