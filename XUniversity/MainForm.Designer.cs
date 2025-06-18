@@ -15,6 +15,7 @@ namespace XUniversity
         private Button btnManageUserRole, btnGrant, btnRevoke, btnView;
         private Button btnTestConnection;
         private DataGridView dgvPreview;
+        private Button btnLogout;
 
         private void BuildInitializeComponent()
         {
@@ -28,7 +29,17 @@ namespace XUniversity
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleCenter
             };
-            panelHeader.Controls.Add(lblTitle);
+
+
+            btnLogout = new Button();
+            btnLogout.Text = "Đăng xuất";
+            btnLogout.Font = new Font("Segoe UI", 9F);
+            btnLogout.Size = new Size(100, 30);
+
+            btnLogout.Location = new Point(this.Width - 110, 10);
+            btnLogout.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnLogout.Click += BtnLogout_Click;
+            this.Controls.Add(btnLogout);
 
             // Sidebar
             panelSidebar = new Panel { Dock = DockStyle.Left, Width = 220, BackColor = Color.FromArgb(245, 245, 245) };
