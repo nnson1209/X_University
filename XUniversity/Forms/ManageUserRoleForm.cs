@@ -68,7 +68,7 @@ namespace XUniversity.Forms
             // Hiển thị danh sách role trên dgvRoles
             try
             {
-                using (var cmd = new OracleCommand("SELECT role FROM dba_roles", connection))
+                using (var cmd = new OracleCommand("SELECT role FROM dba_roles WHERE COMMON = 'NO'", connection))
                 using (var adapter = new OracleDataAdapter(cmd))
                 {
                     var dt = new DataTable();
@@ -99,6 +99,12 @@ namespace XUniversity.Forms
                     "User created successfully.",
                     "Lỗi tạo user"
                 );
+
+                ExecNonQuery(
+                    $"GRANT CONNECT TO {txtUsername.Text}",
+                    $"Quyền CONNECT đã được cấp cho user {txtUsername.Text}.",
+                    $"Lỗi cấp quyền CONNECT cho user {txtUsername.Text}"
+                );
                 btnViewUsers_Click(null, null); // Refresh danh sách
             };
 
@@ -120,6 +126,11 @@ namespace XUniversity.Forms
                     $"ALTER USER {txtUsername.Text} IDENTIFIED BY {txtNewPassword.Text}",
                     "User password updated successfully.",
                     "Lỗi cập nhật user"
+                );
+                ExecNonQuery(
+                    $"GRANT CONNECT TO {txtUsername.Text}",
+                    $"Quyền CONNECT đã được cấp cho user {txtUsername.Text}.",
+                    $"Lỗi cấp quyền CONNECT cho user {txtUsername.Text}"
                 );
                 btnViewUsers_Click(null, null);
             };

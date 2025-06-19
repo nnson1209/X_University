@@ -298,7 +298,7 @@ namespace XUniversity.Forms
 
                 MessageBox.Show("Chào mừng NV PKT! Bạn có quyền xem toàn bộ đăng ký và cập nhật điểm số.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            else if (role == "GIANGVIEN") // Vai trò 'GV' trong database
+            else if (role == "GV") // Vai trò 'GV' trong database
             {
                 // GV chỉ có quyền SELECT, không có quyền INSERT/UPDATE/DELETE trên DANGKY thông thường
                 // Chính sách vpd_gv_dangky đã giới hạn SELECT theo MAGV
